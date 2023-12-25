@@ -1,7 +1,6 @@
 
 const { createCanvas } = require('canvas');
 const WrapText = require('../constants/wrap-text')
-const Gaps = require('../constants/gaps')
 
 const createImage = async (data, title, subTitle, currentCount, rounds) => {
     // Canvas setup
@@ -61,7 +60,6 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
 
     // looping the queactions
     for (i = currentCount; i < data.length; i++) {
-
         if (questionYGap >= canvasHeight - 50 /**end space */) {
             const image = canvas.toBuffer('image/png');
             return { image, i }
@@ -103,7 +101,6 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
     }
 
     const image = canvas.toBuffer('image/png');
-
     return { image }
 }
 
