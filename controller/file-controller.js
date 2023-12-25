@@ -1,10 +1,7 @@
 const createImage = require("../utils/image-create");
 const PDFDocument = require("pdfkit");
 
-const { v4: uuidV4 } = require("uuid");
-
 const fs = require("fs");
-const path = require("path");
 
 const genarateImage = async (req, res) => {
   const { data, title, subTitle } = req.body;
