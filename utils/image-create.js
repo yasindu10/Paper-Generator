@@ -36,7 +36,7 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
       "29"
     );
 
-    titleLong.forEach((e) => {
+    titleLong.forEach(() => {
       subTitleYGap += 35;
       questionYGap += 25;
       answerYGap += 25;
@@ -50,8 +50,8 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
 
   ctx.textAlign = "left"; // question and answer -> left
 
-  // looping the queactions
-  for (i = currentCount; i < data.length; i++) {
+  // looping the questions
+  for (let i = currentCount; i < data.length; i++) {
     if (questionYGap >= canvasHeight - 50 /**end space */) {
       const image = canvas.toBuffer("image/png");
       return { image, i };
@@ -72,7 +72,7 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
       answerData += `${xIndex + 1}.${data[i].answers[xIndex]}     `;
     }
 
-    isLong.forEach((e) => {
+    isLong.forEach(() => {
       answerYGap += 39;
       questionYGap += 39;
     });
@@ -86,7 +86,7 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
       fontSize
     );
 
-    answerLong.forEach((e) => {
+    answerLong.forEach(() => {
       answerYGap += 25;
       questionYGap += 25;
     });

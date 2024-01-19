@@ -4,15 +4,15 @@ require("express-async-errors");
 const express = require("express");
 const app = express();
 
-const { genarateImage } = require("./controller/file-controller");
-const errorHandeller = require("./middlewares/error-handeller");
+const { generateImage } = require("./controller/file-controller");
+const errorHandler = require("./middlewares/error-handeller");
 
 app.use(express.json());
 
-app.post("/api/v1/paper", genarateImage);
+app.post("/api/v1/paper", generateImage);
 
-// error handeller
-app.use(errorHandeller);
+// error handler
+app.use(errorHandler);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

@@ -3,7 +3,7 @@ const PDFDocument = require("pdfkit");
 
 const fs = require("fs");
 
-const genarateImage = async (req, res) => {
+const generateImage = async (req, res) => {
   const { data, title, subTitle } = req.body;
 
   let rounds = 1;
@@ -36,16 +36,16 @@ const genarateImage = async (req, res) => {
       fit: [canvasWidth / 2, canvasHeight / 2],
     });
 
-    if (allImageBytes.length - 1 != allImageBytes.indexOf(e)) {
+    if (allImageBytes.length - 1 !== allImageBytes.indexOf(e)) {
       doc.addPage();
     }
   });
 
-  const stream = fs.createWriteStream("outpub.pdf");
+  const stream = fs.createWriteStream("output.pdf");
   doc.pipe(stream);
   doc.end();
 
   res.status(200).json({ success: true });
 };
 
-module.exports = { genarateImage };
+module.exports = { generateImage };
