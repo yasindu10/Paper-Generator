@@ -1,9 +1,11 @@
 const createImage = require("../utils/image-create");
 const PDFDocument = require("pdfkit");
-
-const fs = require("fs");
+const blobStream = require('blob-stream')
+const { v4: uuidv4 } = require('uuid')
+const { ref, getStorage, uploadBytes, getDownloadURL } = require('firebase/storage')
 
 const generateImage = async (req, res) => {
+  console.log('call')
   const { data, title, subTitle } = req.body;
 
   let rounds = 1;
@@ -41,11 +43,21 @@ const generateImage = async (req, res) => {
     }
   });
 
-  const stream = fs.createWriteStream("output.pdf");
-  doc.pipe(stream);
-  doc.end();
+  const stream = doc.pipe(blobStream())
 
-  res.status(200).json({ success: true });
+  let downloadURL;
+
+  stream.on('finish', async function () {
+    const blob = stream.toBlob('application/pdf')
+    const path = ref(getStorage(), `pdf/${uuidv4()}.pdf`)
+
+    await uploadBytes(path, blob);
+    downloadURL = await getDownloadURL(path);
+
+    res.status(201).json({ success: true, url: downloadURL })
+  })
+
+  doc.end();
 };
 
 module.exports = { generateImage };
