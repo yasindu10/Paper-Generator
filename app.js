@@ -15,6 +15,7 @@ const cors = require('cors')
 firebase.initializeApp(require('./firebase/config-firebase'))
 
 app.use(express.json());
+app.use(express.urlencoded({extended : true}))
 app.use(cors({ origin: '*' }))
 app.use(helmat())
 app.use(xss())

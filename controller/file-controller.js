@@ -2,7 +2,7 @@ const createImage = require("../utils/image-create");
 const PDFDocument = require("pdfkit");
 const blobStream = require('blob-stream')
 const { ref, getStorage, uploadBytes, getDownloadURL } = require('firebase/storage')
-const {v1 : uuidv1} = require('uuid')
+const { v1: uuidv1 } = require('uuid')
 
 const generateImage = async (req, res) => {
   const { data, title, subTitle } = req.body;
