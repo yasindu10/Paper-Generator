@@ -1,4 +1,4 @@
-const { createCanvas } = require("canvas");
+const { createCanvas, registerFont } = require("canvas");
 const WrapText = require("../constants/wrap-text");
 
 const createImage = async (data, title, subTitle, currentCount, rounds) => {
@@ -6,12 +6,14 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
   const canvasWidth = 900;
   const canvasHeight = 1300;
 
+  registerFont('./fonts/Poppins-Regular.ttf', { family: 'Poppins' })
+
   const canvas = createCanvas(canvasWidth, canvasHeight);
 
   // Axis setup
   let xAxisGap = 50; // normal x gap
-  let questionYGap = 170;
-  let answerYGap = 203;
+  let questionYGap = 175;
+  let answerYGap = 210;
   let titleYGap = 25;
   let subTitleYGap = 85;
 
@@ -27,13 +29,15 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
 
   if (!(rounds > 1)) {
     ctx.textAlign = "center"; // title and subTitle Center
+
+    // title
     const { isLong: titleLong } = WrapText(
       ctx,
       title,
       canvasWidth / 2,
       titleYGap,
       maxWidth,
-      "29"
+      "30"
     );
 
     titleLong.forEach(() => {
@@ -42,7 +46,8 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
       answerYGap += 25;
     });
 
-    WrapText(ctx, subTitle, canvasWidth / 2, subTitleYGap, maxWidth, "27");
+    // sub title
+    WrapText(ctx, subTitle, canvasWidth / 2, subTitleYGap, maxWidth, "28");
   } else {
     questionYGap = 50;
     answerYGap = 83;
@@ -69,7 +74,9 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
 
     let answerData = "";
     for (let xIndex = 0; xIndex < data[i].answers.length; xIndex++) {
-      answerData += `${xIndex + 1}.${data[i].answers[xIndex]}     `;
+      const answers = data[i].answers
+      answerData +=
+        `${xIndex + 1}.${answers[xIndex]}${answers.length === (xIndex + 1) ? '' : '     '}`;
     }
 
     isLong.forEach(() => {

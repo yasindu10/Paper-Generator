@@ -5,7 +5,7 @@ const wrapText = (ctx, text, x, y, maxWidth, fontSize) => {
   let yPos = y;
   let isLong = [];
 
-  ctx.font = `${fontSize}px Arial`;
+  ctx.font = `${fontSize}px 'Poppins'`;
 
   for (let i = 0; i < words.length; i++) {
     let testLine = line + words[i] + " ";
