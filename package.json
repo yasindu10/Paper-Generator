@@ -4,7 +4,8 @@
   "description": "A Paper API",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "Yasindu Samarasinghe",
@@ -18,6 +19,7 @@
     "express-async-errors": "^3.1.1",
     "firebase": "^10.7.2",
     "helmet": "^7.1.0",
+    "paypal-rest-sdk": "^1.8.1",
     "pdfkit": "^0.14.0",
     "uuid": "^9.0.1",
     "xss-clean": "^0.1.4"

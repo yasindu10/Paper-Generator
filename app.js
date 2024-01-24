@@ -4,23 +4,32 @@ require("express-async-errors");
 const express = require("express");
 const app = express();
 
-const { generateImage } = require("./controller/file-controller");
+const { generateImage } = require("./controller/fileController");
 const errorHandler = require("./middlewares/error-handeller");
 
 const firebase = require('firebase/app')
 const helmat = require('helmet')
 const xss = require('xss-clean')
 const cors = require('cors')
+const paypal = require('paypal-rest-sdk')
+
+const payRouter = require('./routers/payRouter')
 
 firebase.initializeApp(require('./firebase/config-firebase'))
 
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': process.env.PAYPAL_CLIENT_ID,
+  'client_secret': process.env.CLIENT_SECRET,
+});
+
 app.use(express.json());
-app.use(express.urlencoded({extended : true}))
 app.use(cors({ origin: '*' }))
 app.use(helmat())
 app.use(xss())
 
 app.post("/api/v1/paper", generateImage);
+app.use('/api/v1/payment', payRouter)
 
 // error handler
 app.use(errorHandler);
