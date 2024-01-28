@@ -12,6 +12,7 @@ const helmat = require('helmet')
 const xss = require('xss-clean')
 const cors = require('cors')
 const paypal = require('paypal-rest-sdk')
+const cookie = require('cookie-parser')
 
 const payRouter = require('./routers/payRouter')
 
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use(cors({ origin: '*' }))
 app.use(helmat())
 app.use(xss())
+app.use(cookie())
 
 app.post("/api/v1/paper", generateImage);
 app.use('/api/v1/payment', payRouter)

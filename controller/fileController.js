@@ -1,4 +1,4 @@
-const createImage = require("../utils/image-create");
+const createImage = require("../utils/imageCreate");
 const PDFDocument = require("pdfkit");
 const blobStream = require('blob-stream')
 const { ref, getStorage, uploadBytes, getDownloadURL } = require('firebase/storage')
