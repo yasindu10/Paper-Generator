@@ -1,4 +1,4 @@
-const CustomErrorHandeller = require('../errors/custom-errors')
+const CustomErrorHandeller = require('../errors/customErrors')
 
 const jwt = require('jsonwebtoken')
 

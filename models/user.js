@@ -32,4 +32,13 @@ const schema = mongoose.Schema({
     },
 })
 
-module.exports = schema
+schema.pre('save', async function () {
+    const solt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password, solt)
+})
+
+schema.methods.comparePassword = async function (currentPassword) {
+    return await bcrypt.compare(currentPassword, this.password)
+}
+
+module.exports = mongoose.model('Users', schema)

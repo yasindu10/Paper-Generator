@@ -1,21 +1,23 @@
 const { ref, uploadBytes, getStorage } = require("firebase/storage")
-const CustomErrorHandeller = require("../errors/custom-errors")
+const CustomErrorHandeller = require("../errors/customErrors")
 
 const jwt = require("jsonwebtoken")
 
 const User = require("../models/user")
 const Token = require("../models/token")
 
+const { v4: uuidv4 } = require('uuid')
 
 const register = async (req, res) => {
     if (!req.file) throw new CustomErrorHandeller("No image selected", 400)
 
-    const path = ref(getStorage(), `profilePics/${req.file.originalname}`)
+    const path = ref(getStorage(), `profilePics/${uuidv4()}.jpg`)
     await uploadBytes(path, req.file.buffer)
 
     const user = await User.create({
         ...req.body,
         profilePic: req.file.originalname,
+        role: 'n-user',
     })
 
     res.status(200).json({ success: true, data: user })
