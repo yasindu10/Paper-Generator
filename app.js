@@ -5,7 +5,11 @@ const express = require("express");
 const app = express();
 
 const { generateImage } = require("./controller/fileController");
-const errorHandler = require("./middlewares/error-handeller");
+const errorHandler = require("./middlewares/errorHandeller");
+const {
+  authorization,
+  authorizationPermission
+} = require('./middlewares/authorization')
 
 const firebase = require('firebase/app')
 const helmat = require('helmet')
@@ -14,7 +18,8 @@ const cors = require('cors')
 const paypal = require('paypal-rest-sdk')
 const cookie = require('cookie-parser')
 
-const payRouter = require('./routers/payRouter')
+const payRouter = require('./routers/payRouter');
+const authRouter = require("./routers/authRouter");
 
 firebase.initializeApp(require('./firebase/config-firebase'))
 
@@ -30,8 +35,17 @@ app.use(helmat())
 app.use(xss())
 app.use(cookie())
 
-app.post("/api/v1/paper", generateImage);
+app.use('/api/v1/auth', authRouter)
+
+// authoriza the user
+app.use(authorization)
+
 app.use('/api/v1/payment', payRouter)
+
+app.post('/api/v1/paper',
+  authorizationPermission(['p-user', 'admin']),
+  generateImage,
+);
 
 // error handler
 app.use(errorHandler);
