@@ -61,17 +61,17 @@ const login = async (req, res) => {
         } catch (err) {
             throw new CustomError(`expired refresh token`, 400)
         }
-    } else {
-        await Token.create({ userId: user._id, refreshToken })
-
-        res.cookie("jwt", refreshToken, {
-            maxAge: 1000 * 60 * 60 * 24 * 50,
-            secure: true,
-            httpOnly: true,
-        })
-
-        res.status(200).json({ success: true, accessToken })
     }
+
+    await Token.create({ userId: user._id, refreshToken })
+
+    res.cookie("jwt", refreshToken, {
+        maxAge: 1000 * 60 * 60 * 24 * 50,
+        secure: true,
+        httpOnly: true,
+    })
+
+    res.status(200).json({ success: true, accessToken })
 }
 
 const logout = async (req, res) => {
@@ -116,7 +116,6 @@ const createAccessToken = async (req, res) => {
     )
 
     res.status(200).json({ success: true, accessToken })
-
 }
 
 module.exports = {
