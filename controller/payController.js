@@ -4,7 +4,7 @@ const createPayment = async (req, res) => {
     const create_payment_json = {
         intent: "sale",
         payer: {
-            payment_method: "paypal",
+            payment_method: "paypal",s
         },
         redirect_urls: {
             return_url: `http://localhost:${process.env.PORT || 8080
