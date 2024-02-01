@@ -38,18 +38,9 @@ const login = async (req, res) => {
 
     const tokenUser = await Token.findOne({ userId: user._id })
 
-    const refreshToken = jwt.sign(
-        { userId: user._id, role: user.role },
-        process.env.REFRESH_TOKEN_KEY,
-        {
-            expiresIn: "30d",
-        }
-    )
-
     const accessToken = jwt.sign(
         { userId: user._id, role: user.role },
-        process.env.ACCESS_TOKEN_KEY,
-        {
+        process.env.ACCESS_TOKEN_KEY,{
             expiresIn: "10m",
         }
     )
@@ -62,6 +53,13 @@ const login = async (req, res) => {
             throw new CustomError(`expired refresh token`, 400)
         }
     }
+
+    const refreshToken = jwt.sign(
+        { userId: user._id, role: user.role },
+        process.env.REFRESH_TOKEN_KEY,{
+            expiresIn: "30d",
+        }
+    )
 
     await Token.create({ userId: user._id, refreshToken })
 
