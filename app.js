@@ -22,7 +22,7 @@ const cookie = require('cookie-parser')
 const payRouter = require('./routers/payRouter');
 const authRouter = require("./routers/authRouter");
 
-firebase.initializeApp(require('./firebase/config-firebase'))
+firebase.initializeApp(require('./firebase/configFirebase'))
 
 paypal.configure({
   'mode': 'sandbox', //sandbox or live

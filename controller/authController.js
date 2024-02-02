@@ -7,7 +7,6 @@ const Token = require("../models/token")
 const jwt = require("jsonwebtoken")
 const { v4: uuidv4 } = require('uuid')
 
-
 const register = async (req, res) => {
     if (!req.file) throw new CustomError("No image selected", 400)
 
@@ -40,10 +39,9 @@ const login = async (req, res) => {
 
     const accessToken = jwt.sign(
         { userId: user._id, role: user.role },
-        process.env.ACCESS_TOKEN_KEY,{
-            expiresIn: "10m",
-        }
-    )
+        process.env.ACCESS_TOKEN_KEY, {
+        expiresIn: "10m",
+    })
 
     if (tokenUser) {
         try {
@@ -56,10 +54,9 @@ const login = async (req, res) => {
 
     const refreshToken = jwt.sign(
         { userId: user._id, role: user.role },
-        process.env.REFRESH_TOKEN_KEY,{
-            expiresIn: "30d",
-        }
-    )
+        process.env.REFRESH_TOKEN_KEY, {
+        expiresIn: "30d",
+    })
 
     await Token.create({ userId: user._id, refreshToken })
 
