@@ -43,22 +43,22 @@ const login = async (req, res) => {
         expiresIn: "10m",
     })
 
-    if (tokenUser) {
-        try {
-            jwt.verify(tokenUser.refreshToken, process.env.REFRESH_TOKEN_KEY)
-            return res.status(200).json({ accessToken })
-        } catch (err) {
-            throw new CustomError(`expired refresh token`, 400)
-        }
-    }
-
     const refreshToken = jwt.sign(
         { userId: user._id, role: user.role },
         process.env.REFRESH_TOKEN_KEY, {
         expiresIn: "30d",
     })
 
-    await Token.create({ userId: user._id, refreshToken })
+    if (tokenUser) {
+        console.log('alredy a user')
+        await Token.updateOne({ userId: user._id }, {
+            $push: { refreshToken: refreshToken }
+        })
+    } else {
+        console.log('new user')
+        await Token.create({ userId: user._id, refreshToken })
+    }
+
 
     res.cookie("jwt", refreshToken, {
         maxAge: 1000 * 60 * 60 * 24 * 50,
@@ -76,11 +76,11 @@ const logout = async (req, res) => {
         throw new CustomError(`no refresh token found`, 404)
     }
 
-    const refreshUser = await Token.findOne({ refreshToken })
+    const userToken = await Token.findOne({ refreshToken: [refreshToken] })
 
-    if (!refreshUser) throw new CustomError(`Forbitten`, 404)
+    if (!userToken) throw new CustomError(`Forbitten`, 404)
 
-    await refreshUser.deleteOne()
+    await userToken.deleteOne()
     res.clearCookie("jwt")
     res.status(200).json({ success: true, data: "logout success" })
 }
