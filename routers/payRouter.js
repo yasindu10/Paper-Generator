@@ -11,7 +11,7 @@ const {
 const { authorizationPermission } = require('../middlewares/authorization')
 
 
-payRouter.use(authorizationPermission(['n-user', 'admin']))
+// payRouter.use(authorizationPermission(['n-user', 'admin']))
 
 // the tools app payment
 payRouter.get('/', createPayment)
