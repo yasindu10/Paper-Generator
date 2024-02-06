@@ -39,7 +39,7 @@ app.use(cookie())
 app.use('/api/v1/auth', authRouter)
 
 // authoriza the user
-app.use(authorization)
+// app.use(authorization)
 
 app.use('/api/v1/payment', payRouter)
 
