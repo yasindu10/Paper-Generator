@@ -6,7 +6,7 @@ const app = express();
 
 const { generateImage } = require("./controller/fileController");
 const errorHandler = require("./middlewares/errorHandeller");
-const connectDb = require('./db/connectDb')
+const connectDB = require('./db/connectDb')
 const {
   authorization,
   authorizationPermission
@@ -39,7 +39,7 @@ app.use(cookie())
 app.use('/api/v1/auth', authRouter)
 
 // authoriza the user
-// app.use(authorization)
+app.use(authorization)
 
 app.use('/api/v1/payment', payRouter)
 
@@ -53,6 +53,6 @@ app.use(errorHandler);
 
 const port = process.env.PORT || 8080;
 app.listen(port, async () => {
-  await connectDb(process.env.MONGO_URL)
+  await connectDB(process.env.MONGO_URL)
   console.log(`server listening on port ${port}`);
 });

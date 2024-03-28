@@ -1,4 +1,3 @@
-
 class CustomError extends Error {
     constructor(msg, stateCode) {
         super(msg)

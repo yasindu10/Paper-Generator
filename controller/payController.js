@@ -66,10 +66,11 @@ const successPayment = async (req, res) => {
 }
 
 const cancelPayment = (req, res) => {
-    const htmlPart = `
-        <h3>Cancel payment</h3>
-    `
-    res.status(400).send(htmlPart)
+    res.status(400).send(`<h3>Cancel payment</h3>`)
 }
 
-module.exports = { createPayment, successPayment, cancelPayment }
+module.exports = {
+    createPayment,
+    successPayment,
+    cancelPayment
+}

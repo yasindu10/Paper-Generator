@@ -1,5 +1,5 @@
 const { createCanvas, registerFont } = require("canvas");
-const WrapText = require("../constants/wrap-text");
+const WrapText = require("./wrapText");
 
 const createImage = async (data, title, subTitle, currentCount, rounds) => {
   // Canvas setup
@@ -7,7 +7,6 @@ const createImage = async (data, title, subTitle, currentCount, rounds) => {
   const canvasHeight = 1300;
 
   registerFont('./fonts/Poppins-Regular.ttf', { family: 'Poppins' })
-
   const canvas = createCanvas(canvasWidth, canvasHeight);
 
   // Axis setup

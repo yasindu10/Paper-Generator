@@ -36,7 +36,7 @@ const generateImage = async (req, res) => {
     doc.image(e, {
       fit: [canvasWidth / 2, canvasHeight / 2],
     })
-
+    
     if (allImageBytes.length - 1 !== allImageBytes.indexOf(e)) {
       doc.addPage()
     }

@@ -42,7 +42,6 @@ const login = async (req, res) => {
         process.env.ACCESS_TOKEN_KEY, {
         expiresIn: "10m",
     })
-
     const refreshToken = jwt.sign(
         { userId: user._id, role: user.role },
         process.env.REFRESH_TOKEN_KEY, {
@@ -59,13 +58,11 @@ const login = async (req, res) => {
         await Token.create({ userId: user._id, refreshToken })
     }
 
-
     res.cookie("jwt", refreshToken, {
         maxAge: 1000 * 60 * 60 * 24 * 50,
         secure: true,
         httpOnly: true,
     })
-
     res.status(200).json({ success: true, accessToken })
 }
 
@@ -77,7 +74,6 @@ const logout = async (req, res) => {
     }
 
     const userToken = await Token.findOne({ refreshToken: [refreshToken] })
-
     if (!userToken) throw new CustomError(`Forbitten`, 404)
 
     await userToken.deleteOne()
@@ -95,13 +91,11 @@ const createAccessToken = async (req, res) => {
     }
 
     const tokenUser = await Token.findOne({ refreshToken })
-
     if (!tokenUser) {
         throw new CustomError(`Forbitten`, 401)
     }
 
     const user = await User.findOne({ _id: tokenUser.userId })
-
     const accessToken = jwt.sign(
         { userId: user._id, role: user.role },
         process.env.ACCESS_TOKEN_KEY,
