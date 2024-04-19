@@ -37,10 +37,7 @@ app.use(xss())
 app.use(cookie())
 
 app.use('/api/v1/auth', authRouter)
-
-// authoriza the user
-app.use(authorization)
-
+app.use(authorization) // authorization
 app.use('/api/v1/payment', payRouter)
 
 app.post('/api/v1/paper',
