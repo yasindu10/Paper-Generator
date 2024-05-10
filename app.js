@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 
 const { generateImage } = require("./controller/fileController");
-const errorHandler = require("./middlewares/errorHandeller");
+const errorHandler = require("./middlewares/errorHandler");
 const connectDB = require('./db/connectDb')
 const {
   authorization,
@@ -13,7 +13,7 @@ const {
 } = require('./middlewares/authorization')
 
 const firebase = require('firebase/app')
-const helmat = require('helmet')
+const helmet = require('helmet')
 const xss = require('xss-clean')
 const cors = require('cors')
 const paypal = require('paypal-rest-sdk')
@@ -32,7 +32,7 @@ paypal.configure({
 
 app.use(express.json());
 app.use(cors({ origin: '*' }))
-app.use(helmat())
+app.use(helmet())
 app.use(xss())
 app.use(cookie())
 

@@ -49,7 +49,7 @@ const login = async (req, res) => {
     })
 
     if (tokenUser) {
-        console.log('alredy a user')
+        console.log('already a user')
         await Token.updateOne({ userId: user._id }, {
             $push: { refreshToken: refreshToken }
         })
@@ -74,7 +74,7 @@ const logout = async (req, res) => {
     }
 
     const userToken = await Token.findOne({ refreshToken: [refreshToken] })
-    if (!userToken) throw new CustomError(`Forbitten`, 404)
+    if (!userToken) throw new CustomError(`Forbidden`, 404)
 
     await userToken.deleteOne()
     res.clearCookie("jwt")
@@ -87,12 +87,12 @@ const createAccessToken = async (req, res) => {
     try {
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY)
     } catch (error) {
-        throw new CustomError(`Forbitten`, 401)
+        throw new CustomError(`Forbidden`, 401)
     }
 
     const tokenUser = await Token.findOne({ refreshToken })
     if (!tokenUser) {
-        throw new CustomError(`Forbitten`, 401)
+        throw new CustomError(`Forbidden`, 401)
     }
 
     const user = await User.findOne({ _id: tokenUser.userId })
