@@ -4,7 +4,8 @@
   "description": "A Paper API",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.ts"
   },
   "keywords": [],
   "author": "Yasindu Samarasinghe",
@@ -27,5 +28,10 @@
     "pdfkit": "^0.14.0",
     "uuid": "^9.0.1",
     "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.11",
+    "ts-node": "^10.9.2"
   }
 }
