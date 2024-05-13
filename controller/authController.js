@@ -1,5 +1,5 @@
 const { ref, uploadBytes, getStorage } = require("firebase/storage")
-const CustomError = require("../errors/customErrors")
+const ErrorHandler = require("../errors/customErrors")
 
 const User = require("../models/user")
 const Token = require("../models/token")
@@ -8,10 +8,10 @@ const jwt = require("jsonwebtoken")
 const { v4: uuidv4 } = require('uuid')
 
 const register = async (req, res) => {
-    if (!req.file) throw new CustomError("No image selected", 400)
+    if (!req.file) throw new ErrorHandler("No image selected", 400)
 
     const path = ref(getStorage(), `profilePics/${uuidv4()}.jpg`)
-    await uploadBytes(path, req.file.buffer)
+    await uploadBytes(path, req.file.buffer, { contentType: 'image/jpeg' })
 
     const user = await User.create({
         ...req.body,
@@ -26,28 +26,22 @@ const login = async (req, res) => {
     const { email, password } = req.body
 
     if (!email || !password)
-        throw new CustomError("please enter email and password", 400)
+        throw new ErrorHandler("please enter email and password", 400)
 
     const user = await User.findOne({ email })
-    if (!user) throw new CustomError(`no user with email ${email}`, 404)
+    if (!user) throw new ErrorHandler(`no user with email ${email}`, 404)
 
     if (!(await user.comparePassword(password))) {
-        throw new CustomError(`incorrect password`, 400)
+        throw new ErrorHandler(`incorrect password`, 400)
     }
 
+    const accessToken =
+        user.createToken(process.env.ACCESS_TOKEN_KEY, "10m")
+
+    const refreshToken =
+        user.createToken(process.env.REFRESH_TOKEN_KEY, "30m")
+
     const tokenUser = await Token.findOne({ userId: user._id })
-
-    const accessToken = jwt.sign(
-        { userId: user._id, role: user.role },
-        process.env.ACCESS_TOKEN_KEY, {
-        expiresIn: "10m",
-    })
-    const refreshToken = jwt.sign(
-        { userId: user._id, role: user.role },
-        process.env.REFRESH_TOKEN_KEY, {
-        expiresIn: "30d",
-    })
-
     if (tokenUser) {
         console.log('already a user')
         await Token.updateOne({ userId: user._id }, {
@@ -70,11 +64,11 @@ const logout = async (req, res) => {
     const refreshToken = req.cookies?.jwt
 
     if (!refreshToken) {
-        throw new CustomError(`no refresh token found`, 404)
+        throw new ErrorHandler(`no refresh token found`, 404)
     }
 
     const userToken = await Token.findOne({ refreshToken: [refreshToken] })
-    if (!userToken) throw new CustomError(`Forbidden`, 404)
+    if (!userToken) throw new ErrorHandler(`Forbidden`, 404)
 
     await userToken.deleteOne()
     res.clearCookie("jwt")
@@ -83,26 +77,19 @@ const logout = async (req, res) => {
 
 const createAccessToken = async (req, res) => {
     const refreshToken = req.cookies?.jwt
-
     try {
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY)
     } catch (error) {
-        throw new CustomError(`Forbidden`, 401)
+        throw new ErrorHandler(`Forbidden`, 401)
     }
 
     const tokenUser = await Token.findOne({ refreshToken })
     if (!tokenUser) {
-        throw new CustomError(`Forbidden`, 401)
+        throw new ErrorHandler(`Forbidden`, 401)
     }
 
     const user = await User.findOne({ _id: tokenUser.userId })
-    const accessToken = jwt.sign(
-        { userId: user._id, role: user.role },
-        process.env.ACCESS_TOKEN_KEY,
-        {
-            expiresIn: "30m",
-        }
-    )
+    const accessToken = user.createToken(process.env.ACCESS_TOKEN_KEY, "10m")
 
     res.status(200).json({ success: true, accessToken })
 }

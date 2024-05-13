@@ -7,12 +7,12 @@ const { v1: uuidv1 } = require('uuid')
 const generateImage = async (req, res) => {
   const { data, title, subTitle } = req.body
 
-  let rounds = 1 // round number of creating page
+  let rounds = 1 // round number of current creating page
   let currentIndex = 0
   let allImageBytes = []
 
   // canvas
-  const canvasWidth = 900
+  const canvasWidth = 1000
   const canvasHeight = 1300
 
   for (let index = 0; index < rounds; index++) {
@@ -28,7 +28,7 @@ const generateImage = async (req, res) => {
       currentIndex = i
       rounds++
     }
-    allImageBytes.push(image) // pushing b
+    allImageBytes.push(image)
   }
 
   const doc = new PDFDocument()
@@ -36,19 +36,19 @@ const generateImage = async (req, res) => {
     doc.image(e, {
       fit: [canvasWidth / 2, canvasHeight / 2],
     })
-    
+
     if (allImageBytes.length - 1 !== allImageBytes.indexOf(e)) {
       doc.addPage()
     }
   })
 
-  const stream = doc.pipe(blobStream())
+  const stream = doc.pipe(blobStream()) // stream with cloud
 
   stream.on('finish', async function () {
     const blob = stream.toBlob('application/pdf')
     const path = ref(getStorage(), `pdf/yPapers${uuidv1()}.pdf`)
 
-    await uploadBytes(path, blob)
+    await uploadBytes(path, blob, { contentType: 'application/pdf' })
     const downloadURL = await getDownloadURL(path)
     res.status(201).json({ success: true, url: downloadURL })
   })

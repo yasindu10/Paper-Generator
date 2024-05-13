@@ -1,11 +1,12 @@
-const wrapText = (ctx, text, x, y, maxWidth, fontSize) => {
+const wrapText = (ctx, text, x, y, fontSize) => {
+  const maxWidth = 800 // Max width for the text
   const lineHeight = fontSize * 1.5;
   let words = text.split(" ");
   let line = "";
   let yPos = y;
   let isLong = [];
 
-  ctx.font = `${fontSize}px 'Poppins'`;
+  ctx.font = `${fontSize}px 'Sans'`;
 
   for (let i = 0; i < words.length; i++) {
     let testLine = line + words[i] + " ";
@@ -23,7 +24,6 @@ const wrapText = (ctx, text, x, y, maxWidth, fontSize) => {
   }
 
   ctx.fillText(line, x, yPos);
-
   return { isLong };
 };
 

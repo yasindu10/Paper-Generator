@@ -1,7 +1,7 @@
-const CustomErrorHandler = require('../errors/customErrors')
+const ErrorHandler = require('../errors/customErrors')
 
 const errorHandler = (err, req, res, next) => {
-  if (err instanceof CustomErrorHandler) {
+  if (err instanceof ErrorHandler) {
     console.log('custom error', err.message)
     return res.status(err.stateCode).json({ success: false, msg: err.message })
   }

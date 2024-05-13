@@ -1,6 +1,5 @@
 const express = require('express')
 const authRouter = express.Router()
-
 const { memory } = require('../utils/multerHandlers')
 
 const {

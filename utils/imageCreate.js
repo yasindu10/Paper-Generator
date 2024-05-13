@@ -1,11 +1,10 @@
 const { createCanvas, registerFont } = require("canvas")
 const WrapText = require("./wrapText")
 
-const createImage = async (data, title, subTitle, currentIndex, rounds) => {
+const createPage = async (data, title, subTitle, currentIndex, rounds) => {
   // Canvas setup
-  const canvasWidth = 900
+  const canvasWidth = 1000
   const canvasHeight = 1300
-  const maxWidth = 800 // Max width for the text
 
   // Axis setup
   let xAxisGap = 50 // normal x gap
@@ -34,23 +33,28 @@ const createImage = async (data, title, subTitle, currentIndex, rounds) => {
     ctx.textAlign = "center" // Center the title and subTitle
 
     // write title
-    const { isLong: titleLong } = WrapText(
+    const { isLong: isLongTitle } = WrapText(
       ctx,
       title,
       canvasWidth / 2,
       titleYGap,
-      maxWidth,
       titleFontSize
     )
 
-    titleLong.forEach(() => {
+    // create gap
+    isLongTitle.forEach(() => {
       subTitleYGap += 35
       questionYGap += 25
       answerYGap += 25
     })
 
     // sub title
-    WrapText(ctx, subTitle, canvasWidth / 2, subTitleYGap, maxWidth, subTitleFontSize)
+    WrapText(ctx,
+      subTitle,
+      canvasWidth / 2,
+      subTitleYGap,
+      subTitleFontSize
+    )
   } else {
     questionYGap = 50
     answerYGap = 83
@@ -72,7 +76,6 @@ const createImage = async (data, title, subTitle, currentIndex, rounds) => {
       `${realIndex <= 9 ? `0${realIndex}` : realIndex}) ${data[i].question}`,
       xAxisGap,
       questionYGap,
-      maxWidth,
       qAFontSize
     )
 
@@ -88,16 +91,15 @@ const createImage = async (data, title, subTitle, currentIndex, rounds) => {
       questionYGap += 39
     })
 
-    const { isLong: answerLong } = WrapText(
+    const { isLong: isAnswerLong } = WrapText(
       ctx,
       answerData,
       xAxisGap,
       answerYGap,
-      maxWidth,
       qAFontSize
     )
 
-    answerLong.forEach(() => {
+    isAnswerLong.forEach(() => {
       answerYGap += 25
       questionYGap += 25
     })
@@ -110,4 +112,4 @@ const createImage = async (data, title, subTitle, currentIndex, rounds) => {
   return { image }
 }
 
-module.exports = createImage
+module.exports = createPage

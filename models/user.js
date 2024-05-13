@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
+
 const bcrypt = require('bcryptjs')
+const jwt = require("jsonwebtoken")
 
 const schema = mongoose.Schema({
     userName: {
@@ -12,7 +14,9 @@ const schema = mongoose.Schema({
         type: String,
         unique: true,
         required: [true, 'please enter a email'],
-        match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, , 'please enter a valid']
+        match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            'please enter a valid'
+        ]
     },
     password: {
         type: String,
@@ -39,6 +43,13 @@ schema.pre('save', async function () {
 
 schema.methods.comparePassword = async function (currentPassword) {
     return await bcrypt.compare(currentPassword, this.password)
+}
+
+schema.methods.createToken = function (tokenKey, expireTime) {
+    return jwt.sign(
+        { userId: this._id, role: this.role }, tokenKey, {
+        expiresIn: expireTime
+    })
 }
 
 module.exports = mongoose.model('Users', schema)
