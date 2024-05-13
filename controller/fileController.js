@@ -7,7 +7,7 @@ const { v1: uuidv1 } = require('uuid')
 const generateImage = async (req, res) => {
   const { data, title, subTitle } = req.body
 
-  let rounds = 1
+  let rounds = 1 // round number of creating page
   let currentIndex = 0
   let allImageBytes = []
 
