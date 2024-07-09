@@ -24,5 +24,5 @@ This Paper Generator API is a powerful tool that allows users to create PDF pape
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/paper-generator.git
+git clone https://github.com/yasindu10/Paper-Generator.git
 cd paper-generator
